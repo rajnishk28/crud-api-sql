@@ -1,9 +1,13 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config(); 
 
 // Set up Sequelize instance
-const sequelize = new Sequelize('defaultdb', 'doadmin', 'AVNS_ZnaCBt_ua2ytUC0bkAX', {
-  host: 'social-app-mysql-db-do-user-14581081-0.i.db.ondigitalocean.com',
-  port: 25060,
+const sequelize = new Sequelize(
+  process.env.DATABASE,
+  process.env.NAME,
+  process.env.PASSWORD, {
+  host: process.env.HOST,
+  port: process.env.DBPORT,
   dialect: 'mysql',
   dialectOptions: {
     ssl: {
