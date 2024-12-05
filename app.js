@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const sequelize = require('./config/database');
+const sequelize = require('./config/mySqlDatabase');
 const userRoutes = require('./routes/userRoutes');
+const mongoDatabase = require("./config/mongoDatabase")
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,17 +16,23 @@ app.use('/users', userRoutes);
 // Sync database and start the server
 (async () => {
   try {
-    await sequelize.authenticate(); // Test the database connection
-    console.log('Database connection has been established successfully.');
+    // Test MySQL database connection
+    await sequelize.authenticate();
+    console.log("MySQL Database connection has been established successfully.");
 
-    await sequelize.sync({ alter: true }); // Sync models with the database
-    console.log('Database synced.');
+    // Sync MySQL models with the database
+    await sequelize.sync({ alter: true });
+    console.log("MySQL Database synced.");
+
+    // MongoDB connection is already initialized in `mongoDatabase`
+    await mongoDatabase; // Ensure MongoDB connection resolves successfully
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Error starting the application:', error);
+    console.error("Error starting the application:", error);
     process.exit(1); // Exit the process with a failure code
   }
 })();
+
