@@ -30,6 +30,19 @@ exports.getUserById = async (req, res) => {
 exports.createUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "please fill all the Details"
+      })
+    };
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "User with this email already exists.",
+      });
+    }
     const user = await User.create({ name, email, password });
     res.status(201).json(user);
   } catch (error) {

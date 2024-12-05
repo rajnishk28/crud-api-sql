@@ -20,10 +20,6 @@ app.use('/users', userRoutes);
     await sequelize.authenticate();
     console.log("MySQL Database connection has been established successfully.");
 
-    // Sync MySQL models with the database
-    await sequelize.sync({ alter: true });
-    console.log("MySQL Database synced.");
-
     // MongoDB connection is already initialized in `mongoDatabase`
     await mongoDatabase; // Ensure MongoDB connection resolves successfully
 
