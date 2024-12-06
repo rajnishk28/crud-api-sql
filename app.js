@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./config/mySqlDatabase');
 const userRoutes = require('./routes/userRoutes');
 const mongoDatabase = require("./config/mongoDatabase")
+const fileUploadRoutes =require("./routes/file.routes")
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 
 // Apply user routes
 app.use('/users', userRoutes);
+app.use("/file", fileUploadRoutes);
 
 // Sync database and start the server
 (async () => {
@@ -19,7 +21,7 @@ app.use('/users', userRoutes);
     // Test MySQL database connection
     await sequelize.authenticate();
     console.log("MySQL Database connection has been established successfully.");
-
+    sequelize.sync({ force: false });
     // MongoDB connection is already initialized in `mongoDatabase`
     await mongoDatabase; // Ensure MongoDB connection resolves successfully
 
